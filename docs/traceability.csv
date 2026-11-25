@@ -1,20 +1,16 @@
-FR,User Story / Acceptance Criteria,Component / API,Future Test
-FR-01,US-01 / AC-01-01,POST /tickets (routes + schemas + service + database),test_create_ticket_defaults_and_trim
-FR-01,US-01 / AC-01-02,POST /tickets (schemas),test_create_ticket_validation_errors_422
-FR-02,US-02 / AC-02-01,GET /tickets (service + database),test_list_tickets_filter_status_and_priority_and_ordering
-FR-02,US-02 / AC-02-02,GET /tickets (service + database),test_list_tickets_empty_filter_result
-FR-02,US-02 / AC-02-03,GET /tickets/{id} (routes + service),test_get_nonexistent_ticket_returns_404
-FR-03,US-03 / AC-03-01,PATCH /tickets/{id} (schemas + service),test_patch_ticket_partial_update_preserves_other_fields
-FR-03,US-03 / AC-03-02,PATCH /tickets/{id} (schemas + service),test_patch_ticket_atomicity_on_mixed_invalid_payload
-FR-03,US-03 / AC-03-03,PATCH /tickets/{id} (service),test_patch_closed_ticket_returns_409
-FR-04,US-04 / AC-04-01,PATCH /tickets/{id}/status (service),test_status_valid_transitions_open_to_in_progress_and_closed
-FR-04,US-04 / AC-04-02,PATCH /tickets/{id}/status (service),test_status_closed_cannot_reopen_returns_409
-FR-04,US-04 / AC-04-03,PATCH /tickets/{id}/status (service),test_status_idempotent_same_status_returns_200
-FR-05,US-05 / AC-05-01,PATCH /tickets/{id} & GET /users (service + database),test_assign_and_unassign_ticket_with_null
-FR-05,US-05 / AC-05-02,PATCH /tickets/{id} (service),test_assign_unknown_user_returns_422
-FR-06,US-06 / AC-06-01,POST & GET /tickets/{id}/comments (service + database),test_add_and_list_comments_including_closed_ticket
-FR-06,US-06 / AC-06-02,POST /tickets/{id}/comments (schemas + service),test_comment_validation_empty_body_and_unknown_author_422
-FR-06,US-06 / AC-06-03,POST & GET /tickets/{id}/comments (routes + service),test_comments_for_nonexistent_ticket_returns_404
-FR-07,US-01 / AC-01-01 & US-07 / AC-07-02,database (SQLite) & GET /health,test_sqlite_persistence_across_restart_and_health
-FR-08,US-08 / AC-08-01 (LR4 only),POST /tickets/{id}/ai-recommendation (AI Adapter),test_ai_recommendation_does_not_mutate_ticket_lr4
-COVERAGE,FR-01..FR-07 (7/7),All core endpoints,100%
+FR,User Story / Acceptance Criteria,Component / API,Implemented Test
+FR-01,US-01 / AC-01-01,POST /tickets,tests/test_tickets.py::test_t01_create_ticket_minimal
+FR-01,US-01 / AC-01-02,POST /tickets,tests/test_tickets.py::test_t02_title_boundaries
+FR-02,US-02 / AC-02-01,GET /tickets,tests/test_tickets.py::test_t04_t05_t06_filters_and_predicates
+FR-02,US-02 / AC-02-02,GET /tickets,tests/test_tickets.py::test_t04_t05_t06_filters_and_predicates
+FR-02,US-02 / AC-02-03,GET /tickets/{id},tests/test_tickets.py::test_t03_list_detail_and_404
+FR-03,US-03 / AC-03-01,PATCH /tickets/{id},tests/test_tickets.py::test_t07_patch_partial_and_null_forbidden
+FR-03,US-03 / AC-03-02,PATCH /tickets/{id},tests/test_tickets.py::test_t14_patch_empty_unknown_status_and_atomicity
+FR-03,US-03 / AC-03-03,PATCH /tickets/{id},tests/test_tickets.py::test_t09_t10_status_transitions
+FR-04,US-04 / AC-04-01..03,PATCH /tickets/{id}/status,tests/test_tickets.py::test_t09_t10_status_transitions
+FR-05,US-05 / AC-05-01..02,PATCH /tickets/{id} & GET /users,tests/test_tickets.py::test_t08_assignee_and_unassign
+FR-06,US-06 / AC-06-01..02,POST & GET /tickets/{id}/comments,tests/test_comments.py::test_t11_comments_valid_and_validation
+FR-06,US-06 / AC-06-03,POST & GET /tickets/{id}/comments,tests/test_comments.py::test_t12_comments_404_and_closed_ticket
+FR-07,US-01 / AC-01-01 & US-07,SQLite & GET /health,tests/test_tickets.py::test_t13_persistence_across_restart
+FR-08,US-08 / AC-08-01 (LR4 only),POST /tickets/{id}/ai-recommendation,Not implemented in LR2
+COVERAGE,FR-01..FR-07 (7/7),All 9 core endpoints,100%

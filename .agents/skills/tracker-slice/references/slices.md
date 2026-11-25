@@ -8,7 +8,7 @@ A. Створення й читання
 Сценарії: T01, T02, T03, T13
 
 B. Зміни й стани
-Код (app/): schemas.py, services.py, routes.py
+Код (app/): schemas.py, services.py, routes.py, database.py
 Тести (tests/): test_tickets.py
 Читати: docs/api-contract.md (PATCH /tickets/{id}, PATCH /tickets/{id}/status); docs/requirements.md (розд. 5.2, 5.3)
 Критерії: docs/requirements.md (US-03, US-04, US-05; AC-03-01..03, AC-04-01..03, AC-05-01..02)

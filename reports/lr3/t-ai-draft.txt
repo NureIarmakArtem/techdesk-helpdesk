@@ -1,0 +1,61 @@
+# Первинна відповідь AI (T_AI) для прогалин покриття ЛР1/ЛР2
+# Промпт: Напиши тести pytest для повної матриці переходів статусів (9 пар),
+# правила атомарності PATCH (priority + невідомий assignee_id) та збереження назви з апострофом.
+
+import pytest
+from fastapi.testclient import TestClient
+
+
+@pytest.mark.parametrize(
+    "start_status,target_status,expected_code",
+    [
+        ("OPEN", "OPEN", 200),
+        ("OPEN", "IN_PROGRESS", 200),
+        ("OPEN", "CLOSED", 200),
+        ("IN_PROGRESS", "OPEN", 409),
+        ("IN_PROGRESS", "IN_PROGRESS", 200),
+        ("IN_PROGRESS", "CLOSED", 200),
+        ("CLOSED", "OPEN", 409),
+        ("CLOSED", "IN_PROGRESS", 409),
+        ("CLOSED", "CLOSED", 200),
+    ],
+)
+def test_all_nine_status_transitions(
+    client: TestClient, start_status: str, target_status: str, expected_code: int
+) -> None:
+    ticket = client.post("/tickets", json={"title": "Матриця станів"}).json()
+    if start_status != "OPEN":
+        client.patch(f"/tickets/{ticket['id']}/status", json={"status": start_status})
+
+    resp = client.patch(f"/tickets/{ticket['id']}/status", json={"status": target_status})
+    assert resp.status_code == expected_code
+
+    fetched = client.get(f"/tickets/{ticket['id']}").json()
+    expected_final = target_status if expected_code == 200 else start_status
+    assert fetched["status"] == expected_final
+
+
+def test_patch_atomicity_priority_and_unknown_assignee(client: TestClient) -> None:
+    ticket = client.post(
+        "/tickets", json={"title": "Атомарний PATCH", "priority": "medium", "assignee_id": 1}
+    ).json()
+
+    resp = client.patch(
+        f"/tickets/{ticket['id']}", json={"priority": "high", "assignee_id": 999}
+    )
+    assert resp.status_code == 422
+
+    after = client.get(f"/tickets/{ticket['id']}").json()
+    assert after["priority"] == "medium"
+    assert after["assignee_id"] == 1
+
+
+@pytest.mark.parametrize("title_text", ["Save button", "O'Brien"])
+def test_title_with_apostrophe_saved_exact(client: TestClient, title_text: str) -> None:
+    resp = client.post("/tickets", json={"title": title_text})
+    assert resp.status_code == 201
+    created = resp.json()
+
+    fetched = client.get(f"/tickets/{created['id']}")
+    assert fetched.status_code == 200
+    assert fetched.json()["title"] == title_text

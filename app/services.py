@@ -32,7 +32,6 @@ ALLOWED_TRANSITIONS: dict[str, set[str]] = {
     },
     TicketStatus.CLOSED.value: {
         TicketStatus.CLOSED.value,
-        TicketStatus.OPEN.value,
     },
 }
 

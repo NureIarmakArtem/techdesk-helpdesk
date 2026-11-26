@@ -1,16 +1,16 @@
 FR,User Story / Acceptance Criteria,Component / API,Implemented Test
-FR-01,US-01 / AC-01-01,POST /tickets,tests/test_tickets.py::test_t01_create_ticket_minimal
-FR-01,US-01 / AC-01-02,POST /tickets,tests/test_tickets.py::test_t02_title_boundaries
+FR-01,US-01 / AC-01-01,POST /tickets,tests/test_tickets.py::test_t01_create_ticket_minimal; tests/test_lr3_extended.py::test_lr3_title_with_apostrophe_saved_exact
+FR-01,US-01 / AC-01-02,POST /tickets,tests/test_tickets.py::test_t02_title_boundaries; tests/test_lr3_extended.py::test_lr3_description_and_comment_length_boundaries
 FR-02,US-02 / AC-02-01,GET /tickets,tests/test_tickets.py::test_t04_t05_t06_filters_and_predicates
 FR-02,US-02 / AC-02-02,GET /tickets,tests/test_tickets.py::test_t04_t05_t06_filters_and_predicates
 FR-02,US-02 / AC-02-03,GET /tickets/{id},tests/test_tickets.py::test_t03_list_detail_and_404
 FR-03,US-03 / AC-03-01,PATCH /tickets/{id},tests/test_tickets.py::test_t07_patch_partial_and_null_forbidden
-FR-03,US-03 / AC-03-02,PATCH /tickets/{id},tests/test_tickets.py::test_t14_patch_empty_unknown_status_and_atomicity
+FR-03,US-03 / AC-03-02,PATCH /tickets/{id},tests/test_tickets.py::test_t14_patch_empty_unknown_status_and_atomicity; tests/test_lr3_extended.py::test_lr3_patch_atomicity_priority_and_unknown_assignee
 FR-03,US-03 / AC-03-03,PATCH /tickets/{id},tests/test_tickets.py::test_t09_t10_status_transitions
-FR-04,US-04 / AC-04-01..03,PATCH /tickets/{id}/status,tests/test_tickets.py::test_t09_t10_status_transitions
-FR-05,US-05 / AC-05-01..02,PATCH /tickets/{id} & GET /users,tests/test_tickets.py::test_t08_assignee_and_unassign
-FR-06,US-06 / AC-06-01..02,POST & GET /tickets/{id}/comments,tests/test_comments.py::test_t11_comments_valid_and_validation
+FR-04,US-04 / AC-04-01..03,PATCH /tickets/{id}/status,tests/test_tickets.py::test_t09_t10_status_transitions; tests/test_lr3_extended.py::test_lr3_all_nine_status_transitions
+FR-05,US-05 / AC-05-01..02,PATCH /tickets/{id} & GET /users,tests/test_tickets.py::test_t08_assignee_and_unassign; tests/test_lr3_extended.py::test_lr3_patch_atomicity_priority_and_unknown_assignee
+FR-06,US-06 / AC-06-01..02,POST & GET /tickets/{id}/comments,tests/test_comments.py::test_t11_comments_valid_and_validation; tests/test_lr3_extended.py::test_lr3_description_and_comment_length_boundaries
 FR-06,US-06 / AC-06-03,POST & GET /tickets/{id}/comments,tests/test_comments.py::test_t12_comments_404_and_closed_ticket
 FR-07,US-01 / AC-01-01 & US-07,SQLite & GET /health,tests/test_tickets.py::test_t13_persistence_across_restart
-FR-08,US-08 / AC-08-01 (LR4 only),POST /tickets/{id}/ai-recommendation,Not implemented in LR2
+FR-08,US-08 / AC-08-01 (LR4 only),POST /tickets/{id}/ai-recommendation,Not implemented in LR3
 COVERAGE,FR-01..FR-07 (7/7),All 9 core endpoints,100%

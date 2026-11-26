@@ -1,6 +1,7 @@
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Optional
+from fastapi import HTTPException
 
 from app import database
 from app.schemas import (
@@ -92,10 +93,21 @@ def update_ticket(db_path: Path, ticket_id: int, payload: TicketUpdate) -> dict[
 
     updates: dict[str, Any] = {}
     for field_name in payload.model_fields_set:
+        if field_name == "assignee_id":
+            continue
         val = getattr(payload, field_name)
         updates[field_name] = val.value if isinstance(val, TicketPriority) else val
 
-    return database.update_ticket_fields(db_path, ticket_id, updates)
+    if updates:
+        ticket = database.update_ticket_fields(db_path, ticket_id, updates)
+
+    if "assignee_id" in payload.model_fields_set:
+        if payload.assignee_id is not None and payload.assignee_id not in {1, 2}:
+            raise HTTPException(status_code=422, detail="Unknown assignee_id")
+        ticket = database.update_ticket_fields(
+            db_path, ticket_id, {"assignee_id": payload.assignee_id}
+        )
+    return ticket
 
 
 def change_ticket_status(

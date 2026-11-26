@@ -81,9 +81,9 @@ class TicketUpdate(BaseModel):
             if len(self.description) > 2000:
                 raise ValueError("description must contain at most 2000 characters")
 
-        if "assignee_id" in self.model_fields_set and self.assignee_id is not None:
-            if self.assignee_id not in ALLOWED_USER_IDS:
-                raise ValueError(f"Unknown assignee_id: {self.assignee_id}. Allowed values: 1, 2.")
+        #if "assignee_id" in self.model_fields_set and self.assignee_id is not None:
+        #    if self.assignee_id not in ALLOWED_USER_IDS:
+        #        raise ValueError(f"Unknown assignee_id: {self.assignee_id}. Allowed values: 1, 2.")
 
         return self
 

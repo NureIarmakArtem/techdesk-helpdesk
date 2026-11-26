@@ -62,11 +62,13 @@ def insert_ticket(
     created_at: str,
 ) -> dict[str, Any]:
     with get_connection(db_path) as conn:
-        query = (
-            f"INSERT INTO tickets (title, description, status, priority, assignee_id, created_at) "
-            f"VALUES ('{title}', ?, 'OPEN', ?, ?, ?);"
+        cur = conn.execute(
+            """
+            INSERT INTO tickets (title, description, status, priority, assignee_id, created_at)
+            VALUES (?, ?, 'OPEN', ?, ?, ?);
+            """,
+            (title, description, priority, assignee_id, created_at),
         )
-        cur = conn.execute(query, (description, priority, assignee_id, created_at))
         row = conn.execute(
             "SELECT * FROM tickets WHERE id = ?;", (cur.lastrowid,)
         ).fetchone()
